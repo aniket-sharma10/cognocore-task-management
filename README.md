@@ -24,7 +24,7 @@ A simple Task Management System with CRUD operations using MongoDB, Express, Rea
   - MongoDB
 
 ## Deployed Application URL
-You can access the live application here: https://cognocore-task-management-aniket.vercel.app/
+You can access the live application here: https://cognocore-task-management.vercel.app/
 
 ## Setup Instructions
 
