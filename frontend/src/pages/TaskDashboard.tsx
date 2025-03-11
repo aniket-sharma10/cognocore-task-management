@@ -18,6 +18,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import Spinner from "@/common/Spinner";
 
 interface Task {
   _id: string;
@@ -32,6 +33,7 @@ const TaskDashboard = () => {
   const [editedTask, setEditedTask] = useState<Partial<Task>>({});
   const [isMobile, setIsMobile] = useState(false);
   const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     // Check if screen is mobile size
@@ -51,6 +53,7 @@ const TaskDashboard = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
+      setLoading(true)
       try {
         const res = await fetch("/api/tasks");
         const data = await res.json();
@@ -62,6 +65,8 @@ const TaskDashboard = () => {
         }
       } catch (error) {
         toast.error("Error fetching tasks.");
+      } finally{
+        setLoading(false)
       }
     };
     fetchTasks();
@@ -69,6 +74,7 @@ const TaskDashboard = () => {
 
   // delete task
   const handleDelete = async (taskId: string) => {
+    setLoading(true)
     try {
       const res = await fetch(`/api/tasks/${taskId}`, { method: "DELETE" });
       if (res.ok) {
@@ -79,6 +85,8 @@ const TaskDashboard = () => {
       }
     } catch (error) {
       toast.error("Error deleting task.");
+    } finally{
+      setLoading(false)
     }
   };
   
@@ -99,7 +107,7 @@ const TaskDashboard = () => {
       toast.error("All fields are required.");
       return;
     }
-
+    setLoading(true)
     try {
       const res = await fetch(`/api/tasks/${editingTaskId}`, {
         method: "PATCH",
@@ -123,11 +131,14 @@ const TaskDashboard = () => {
       }
     } catch (error) {
       toast.error("Error updating task.");
+    } finally{
+      setLoading(false)
     }
   };
 
   // handle status update
   const handleStatusChange = async (taskId: string, newStatus: string) => {
+    setLoading(true)
     try {
       const res = await fetch(`/api/tasks/${taskId}`, {
         method: "PATCH",
@@ -150,6 +161,8 @@ const TaskDashboard = () => {
       }
     } catch (error) {
       toast.error("Error updating status.");
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -185,6 +198,8 @@ const TaskDashboard = () => {
         return "Unknown";
     }
   };
+
+  if (loading) return <Spinner />;
 
   // Mobile card view for each task
   const renderMobileTaskCard = (task: Task) => {

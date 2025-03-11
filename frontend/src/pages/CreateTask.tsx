@@ -1,3 +1,4 @@
+import Spinner from "@/common/Spinner";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -37,6 +38,8 @@ const CreateTask = () => {
       setLoading(false);
     }
   };
+
+  if (loading) return <Spinner />;
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
